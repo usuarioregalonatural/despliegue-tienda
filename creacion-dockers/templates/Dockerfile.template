@@ -1,5 +1,6 @@
 #FROM vicsoft01/ubuntu-apache-php-mysql-prestashop.1.7.3.2:1.0
 FROM vicsoft01/ubuntu-apache-php-mysql:1.1
+#FROM vicsoft01/ubuntu18.04-apache2.2-php7.3.11:latest
 
 MAINTAINER VICSOFT
 

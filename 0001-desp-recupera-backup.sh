@@ -19,4 +19,7 @@ echo ""
 
 	# Comentar para realizar la descarga del backup desde remoto
 	cp -r /home/temp/20191116 ${RUTA_TEMP}
+	cd ${RUTA_TIENDA}
+	git clone https://github.com/usuarioregalonatural/web-prod.git
+	cd -
 

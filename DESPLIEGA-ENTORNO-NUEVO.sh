@@ -15,7 +15,7 @@ clear
 #	./0002-desp-restaura-docker-tienda.sh
 
 # Restaura los datos de la web de produccion de la tienda
-	./0003-desp-restaura-web-tienda.sh
+#	./0003-desp-restaura-web-tienda.sh
 
 # Restaura los datos de la base de datos de produccion de la tienda
 	./0004-desp-restaura-bbdd-tienda.sh
