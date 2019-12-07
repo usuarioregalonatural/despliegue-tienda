@@ -44,7 +44,8 @@ else
 	exit 323
 fi
 
-export NOMBRE_IMAGEN="vicsoft01/tienda-${ENTORNO}${SUFIJO_NOMBRE_CONTENEDOR}:${TAG}"
+#export NOMBRE_IMAGEN="vicsoft01/tienda-${ENTORNO}${SUFIJO_NOMBRE_CONTENEDOR}:${TAG}"
+export NOMBRE_IMAGEN="imgbasewww"
 export NOMBRE_IMAGEN_SIN_TAG="vicsoft01/tienda-${ENTORNO}${SUFIJO_NOMBRE_CONTENEDOR}"
 
 backup_dockerfiles
@@ -57,9 +58,10 @@ recoge_cert_ssl
 
 construye_imagen
 eliminar_contenedor 
-construye_cmd_docker
-ejecuta_docker
 
+construye_cmd_docker
+ejecuta_compose
+#ejecuta_docker
 muestra_variables
 
 

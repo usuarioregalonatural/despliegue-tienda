@@ -10,3 +10,7 @@ de prod-bbdd y prod-web a test-bbdd y test-web para que tengan contenido
 * Las imagenes no se ven cuando se despliega porque el backup tiene url amigables
 hay que entrar al backoffice y desactivarlas para que las imagenes se vean bien.
 
+## Siguiente mejora
+
+Se independiza la bbdd en un docker distinto. También PHPMyAdmin
+

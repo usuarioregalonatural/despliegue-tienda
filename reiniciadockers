@@ -1,0 +1,11 @@
+docker stop vic-nginx-proxy
+docker stop tienda-web
+docker stop tienda-phpMyAdmin
+docker stop tienda-mysql
+
+docker rm vic-nginx-proxy
+docker rm tienda-web
+docker rm tienda-phpMyAdmin
+docker rm tienda-mysql
+
+
