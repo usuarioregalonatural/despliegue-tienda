@@ -45,6 +45,20 @@ parsea_dominio () {
   	echo `sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' ${RUTA_TEMPLATES_DOCKER}/fqdn.conf.template > ${RUTA_DOCKER}/fqdn.conf`
   	echo `sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' ${RUTA_TEMPLATES_DOCKER}/default-ssl.conf.template > ${RUTA_DOCKER}/default-ssl.conf`
   	echo `sed 's/VAR_WEB_USER/'"${USER_WEB}"'/g' ${RUTA_TEMPLATES_DOCKER}/mysqlconfig.cnf.template |sed 's/VAR_PASS_USER/'"${PASS_WEB}"'/g' > ${RUTA_DOCKER}/mysqlconfig.cnf`
+
+# Sustitucion template de docker-compose.yml	
+
+parsea_docker_compose
+
+#	echo `sed 's/VAR_IMAGEN_BASE/'"${IMAGEN_BASE}"'/g' ${RUTA_TEMPLATES_DOCKER}/docker-compose.template > ${RUTA_DOCKER}/docker-compose.yml.01`	
+#echo "La ruta WEB es: ${PROD_RUTA_WEB}"
+
+#	VAR_RUTA_WEB_SIN_BARRAS=`echo ${PROD_RUTA_WEB}|sed 's/\//\\\\\//g'`
+#	echo "La ruta WEB es: ${VAR_RUTA_WEB_SIN_BARRAS}"
+#	echo `sed 's/VAR_RUTA_WEB/'"${VAR_RUTA_WEB_SIN_BARRAS}"'/g' ${RUTA_DOCKER}/docker-compose.yml.01 > ${RUTA_DOCKER}/docker-compose.yml`	
+
+
+
 	log "## Fin del parseo de templates"
 	log "##"
 }
@@ -357,3 +371,42 @@ ejecuta_docker(){
 
 }
 
+ejecuta_compose(){
+        #export CMD_EJECUCION_COMPOSE="docker-compose ${RUTA_DOCKER}/docker-compose.yml up -d"
+        export CMD_EJECUCION_COMPOSE="docker-compose up -d"
+	cd ${RUTA_DOCKER} 
+        log ""
+        log "##"
+        log "###############################################################"
+        log "##               EJECUTANDO DOCKER-COMPOSE                   ##"
+
+        echo -e `${CMD_EJECUCION_COMPOSE}`
+        if [ $? -ne 0 ];
+        then
+                log "## Error Ejecutando Compose"
+        else
+                log "## DOCKER-COMPOSE EJECUTADO CON EXITO !!!!!!!!"
+        fi
+
+	cd -
+        echo -e `docker ps -a` >> ${FICHERO_LOG}
+
+}
+
+
+parsea_docker_compose (){
+# Sustitucion template de docker-compose.yml
+        #echo `sed 's/VAR_IMAGEN_BASE/'"${IMAGEN_BASE}"'/g' ${RUTA_TEMPLATES_DOCKER}/docker-compose.template > ${RUTA_DOCKER}/docker-compose.yml.01`
+        echo `sed 's/VAR_IMAGEN_BASE/'"${NOMBRE_IMAGEN}"'/g' ${RUTA_TEMPLATES_DOCKER}/docker-compose.template > ${RUTA_DOCKER}/docker-compose.yml.01`
+        echo "El comando para compose es: sed 's/VAR_IMAGEN_BASE/'"${NOMBRE_IMAGEN}"'/g' ${RUTA_TEMPLATES_DOCKER}/docker-compose.template > ${RUTA_DOCKER}/docker-compose.yml.01"
+
+        VAR_RUTA_WEB_SIN_BARRAS=`echo ${PROD_RUTA_WEB}|sed 's/\//\\\\\//g'`
+        VAR_RUTA_BBDD_SIN_BARRAS=`echo ${PROD_RUTA_MYSQL}|sed 's/\//\\\\\//g'`
+
+        echo "La ruta WEB es: ${VAR_RUTA_WEB_SIN_BARRAS}"
+        #echo `sed 's/VAR_RUTA_WEB/'"${VAR_RUTA_WEB_SIN_BARRAS}"'/g' ${RUTA_DOCKER}/docker-compose.yml.01 > ${RUTA_DOCKER}/docker-compose.yml`
+        echo `sed 's/VAR_RUTA_WEB/'"${VAR_RUTA_WEB_SIN_BARRAS}"'/g' ${RUTA_DOCKER}/docker-compose.yml.01 |sed 's/VAR_RUTA_BBDD/'"${VAR_RUTA_BBDD_SIN_BARRAS}"'/g' > ${RUTA_DOCKER}/docker-compose.yml`
+
+
+
+}

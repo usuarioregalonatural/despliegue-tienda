@@ -10,8 +10,8 @@ COPY ./000-default.conf /etc/apache2/sites-available
 COPY ./default-ssl.conf /etc/apache2/sites-available
 COPY ./fqdn.conf /etc/apache2/conf-available
 COPY ./php.ini /etc/php/7.1/apache2
-#COPY ./mysqlconfig.cnf /
-#COPY ./mysql-ssl.sql /
+COPY ./mysqlconfig.cnf /
+COPY ./mysql-ssl.sql /
 
 VAR_SSLCOPY ./VAR_DOMINIO.crt /etc/apache2/ssl
 VAR_SSLCOPY ./certificate.ca.crt /etc/apache2/ssl
