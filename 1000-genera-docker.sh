@@ -47,6 +47,9 @@ fi
 #export NOMBRE_IMAGEN="vicsoft01/tienda-${ENTORNO}${SUFIJO_NOMBRE_CONTENEDOR}:${TAG}"
 export NOMBRE_IMAGEN="imgbasewww"
 export NOMBRE_IMAGEN_SIN_TAG="vicsoft01/tienda-${ENTORNO}${SUFIJO_NOMBRE_CONTENEDOR}"
+export NOMBRE_IMAGEN_WWW="${ENTORNO}regnatwww"
+export NOMBRE_IMAGEN_BBDD="${ENTORNO}regnatbbdd"
+
 
 backup_dockerfiles
 
@@ -56,7 +59,8 @@ parsea_htaccess
 copia_base_files
 recoge_cert_ssl
 
-construye_imagen
+#construye_imagen
+construye_imagen_www
 eliminar_contenedor 
 
 construye_cmd_docker
