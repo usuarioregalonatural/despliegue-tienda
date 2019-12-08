@@ -55,7 +55,8 @@ backup_dockerfiles
 
 parsea_dominio
 parsea_htaccess
-
+parsea_activacion_root_mysql
+parsea_seteo_dominio_ssl
 copia_base_files
 recoge_cert_ssl
 
@@ -66,6 +67,9 @@ eliminar_contenedor
 construye_cmd_docker
 ejecuta_compose
 #ejecuta_docker
+activarootmysql
+setear_dominio_ssl
+
 muestra_variables
 
 

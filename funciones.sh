@@ -461,10 +461,54 @@ parsea_docker_compose (){
 
         echo "La ruta WEB es: ${VAR_RUTA_WEB_SIN_BARRAS}"
         #echo `sed 's/VAR_RUTA_WEB/'"${VAR_RUTA_WEB_SIN_BARRAS}"'/g' ${RUTA_DOCKER}/docker-compose.yml.01 > ${RUTA_DOCKER}/docker-compose.yml`
-        echo `sed 's/VAR_RUTA_WEB/'"${VAR_RUTA_WEB_SIN_BARRAS}"'/g' ${RUTA_DOCKER}/docker-compose.yml.01 |sed 's/VAR_RUTA_BBDD/'"${VAR_RUTA_BBDD_SIN_BARRAS}"'/g' > ${RUTA_DOCKER}/docker-compose.yml`
+        echo `sed 's/VAR_RUTA_WEB/'"${VAR_RUTA_WEB_SIN_BARRAS}"'/g' ${RUTA_DOCKER}/docker-compose.yml.01 |sed 's/VAR_RUTA_BBDD/'"${VAR_RUTA_BBDD_SIN_BARRAS}"'/g'|sed 's/VAR_CONT_MYSQL/'"${VAR_CONT_MYSQL}"'/g' > ${RUTA_DOCKER}/docker-compose.yml`
 	
 	rm ${RUTA_DOCKER}/docker-compose.yml.01
+}
 
-
+parsea_activacion_root_mysql () {
+ echo `sed 's/VAR_CONT_MYSQL/'"${VAR_CONT_MYSQL}"'/g' ${RUTA_TEMPLATES_DOCKER}/activaroot.sh.template > ${RUTA_DOCKER_BBDD}/activaroot.sh`
 
 }
+
+parsea_seteo_dominio_ssl () {
+ VAR_RUTA_DOCKER_BBDD_SIN_BARRAS=`echo ${RUTA_DOCKER_BBDD}|sed 's/\//\\\\\//g'`
+ log "--> parsesao seteo domionio"
+ echo `sed 's/VAR_CONT_MYSQL/'"${VAR_CONT_MYSQL}"'/g' ${RUTA_TEMPLATES_DOCKER}/setear_dominio_ssl.sh.template|sed 's/VAR_RUTA_DOCKER_BBDD/'"${VAR_RUTA_DOCKER_BBDD_SIN_BARRAS}"'/g' > ${RUTA_DOCKER_BBDD}/setear_dominio_ssl.sh`
+ #echo "sed 's/VAR_CONT_MYSQL/'"${VAR_CONT_MYSQL}"'/g' ${RUTA_TEMPLATES_DOCKER}/setear_dominio_ssl.sh.template|sed 's/VAR_RUTA_DOCKER_BBDD/'"${RUTA_DOCKER_BBDD}"'/g' > ${RUTA_DOCKER_BBDD}/setear_dominio_ssl.sh"
+ log "--> parsesao seteo domionio"
+
+}
+
+activarootmysql () {
+       log ""
+       log "##"
+       log "###############################################################"
+       log "##             ACTIVANDO ACCESO ROOT MYSQL                   ##"
+
+
+       echo -e `bash ${RUTA_DOCKER_BBDD}/activaroot.sh`
+
+       log "##"
+       log "###############################################################"
+       log ""
+       log ""
+ 
+}
+
+setear_dominio_ssl (){
+       log ""
+       log "##"
+       log "###############################################################"
+       log "##        ACTUALIZANDO DOMINIO Y SSL EN PRESTASHOP           ##"
+
+
+       echo -e `bash ${RUTA_DOCKER_BBDD}/setear_dominio_ssl.sh`
+       echo "bash ${RUTA_DOCKER_BBDD}/setear_dominio_ssl.sh"
+
+       log "##"
+       log "###############################################################"
+       log ""
+       log ""
+}
+
