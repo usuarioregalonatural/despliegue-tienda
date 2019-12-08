@@ -33,18 +33,20 @@ parsea_dominio () {
 	#echo "El entorno es: ${URL_TIENDA}"
 	 if [ ${ES_SSL} = "SSL" ]
 	 then
-   		echo `sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' ${RUTA_TEMPLATES_DOCKER}/mysql-ssl.sql.template |sed 's/value=0/value=1/g' > ${RUTA_DOCKER}/mysql-ssl.sql`
-    		echo `sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' ${RUTA_TEMPLATES_DOCKER}/000-default.conf.SSL.template > ${RUTA_DOCKER}/000-default.conf`
-    		echo `sed 's/VAR_SSL/''/g' ${RUTA_TEMPLATES_DOCKER}/Dockerfile.template|sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' > ${RUTA_DOCKER}/Dockerfile`
+   		echo `sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' ${RUTA_TEMPLATES_DOCKER}/mysql-ssl.sql.template |sed 's/value=0/value=1/g' > ${RUTA_DOCKER_BBDD}/mysql-ssl.sql`
+    		echo `sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' ${RUTA_TEMPLATES_DOCKER}/000-default.conf.SSL.template > ${RUTA_DOCKER_WWW}/000-default.conf`
+    		#echo `sed 's/VAR_SSL/''/g' ${RUTA_TEMPLATES_DOCKER}/Dockerfile.template|sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' > ${RUTA_DOCKER}/Dockerfile`
+    		echo `sed 's/VAR_SSL/''/g' ${RUTA_TEMPLATES_DOCKER}/Dockerfile-Web.template|sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g'|sed 's/VAR_IMAGEN_BASE_WWW/'"${IMAGEN_BASE_WWW}"'/g' > ${RUTA_DOCKER_WWW}/Dockerfile`
   	else 
-    		echo `sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' ${RUTA_TEMPLATES_DOCKER}/mysql-ssl.sql.template |sed 's/value=1/value=0/g' > ${RUTA_DOCKER}/mysql-ssl.sql`
-    		echo `sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' ${RUTA_TEMPLATES_DOCKER}/000-default.conf.noSSL.template > ${RUTA_DOCKER}/000-default.conf`
-    		echo `sed 's/VAR_SSL/'#'/g' ${RUTA_TEMPLATES_DOCKER}/Dockerfile.template|sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' > ${RUTA_DOCKER}/Dockerfile`
+    		echo `sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' ${RUTA_TEMPLATES_DOCKER}/mysql-ssl.sql.template |sed 's/value=1/value=0/g' > ${RUTA_DOCKER_BBDD}/mysql-ssl.sql`
+    		echo `sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' ${RUTA_TEMPLATES_DOCKER}/000-default.conf.noSSL.template > ${RUTA_DOCKER_WWW}/000-default.conf`
+    		#echo `sed 's/VAR_SSL/'#'/g' ${RUTA_TEMPLATES_DOCKER}/Dockerfile.template|sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' > ${RUTA_DOCKER}/Dockerfile`
+    		echo `sed 's/VAR_SSL/'#'/g' ${RUTA_TEMPLATES_DOCKER}/Dockerfile-Web.template|sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g'|sed 's/VAR_IMAGEN_BASE_WWW/'"${IMAGEN_BASE_WWW}"'/g' > ${RUTA_DOCKER_WWW}/Dockerfile`
   	fi
 
-  	echo `sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' ${RUTA_TEMPLATES_DOCKER}/fqdn.conf.template > ${RUTA_DOCKER}/fqdn.conf`
-  	echo `sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' ${RUTA_TEMPLATES_DOCKER}/default-ssl.conf.template > ${RUTA_DOCKER}/default-ssl.conf`
-  	echo `sed 's/VAR_WEB_USER/'"${USER_WEB}"'/g' ${RUTA_TEMPLATES_DOCKER}/mysqlconfig.cnf.template |sed 's/VAR_PASS_USER/'"${PASS_WEB}"'/g' > ${RUTA_DOCKER}/mysqlconfig.cnf`
+  	echo `sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' ${RUTA_TEMPLATES_DOCKER}/fqdn.conf.template > ${RUTA_DOCKER_WWW}/fqdn.conf`
+  	echo `sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' ${RUTA_TEMPLATES_DOCKER}/default-ssl.conf.template > ${RUTA_DOCKER_WWW}/default-ssl.conf`
+  	echo `sed 's/VAR_WEB_USER/'"${USER_WEB}"'/g' ${RUTA_TEMPLATES_DOCKER}/mysqlconfig.cnf.template |sed 's/VAR_PASS_USER/'"${PASS_WEB}"'/g' > ${RUTA_DOCKER_BBDD}/mysqlconfig.cnf`
 
 # Sustitucion template de docker-compose.yml	
 
@@ -200,13 +202,13 @@ montar_volumen_logs () {
 copia_base_files(){
 	log "## Copiando para docker ficheros base que no se modifican "
 	
-	rm -f ${RUTA_DOCKER}/ejecuta.sh
+	rm -f ${RUTA_DOCKER_WWW}/ejecuta.sh
 #        rm -f ${RUTA_DOCKER}/mysqlconfig.cnf
-        rm -f ${RUTA_DOCKER}/php.ini
+        rm -f ${RUTA_DOCKER_WWW}/php.ini
 
-	cp ${RUTA_DOCKER_BASEFILES}/ejecuta.sh ${RUTA_DOCKER}
+	cp ${RUTA_DOCKER_BASEFILES}/ejecuta.sh ${RUTA_DOCKER_WWW}
 #	cp ${RUTA_DOCKER_BASEFILES}/mysqlconfig.cnf ${RUTA_DOCKER}
-	cp ${RUTA_DOCKER_BASEFILES}/php.ini ${RUTA_DOCKER}
+	cp ${RUTA_DOCKER_BASEFILES}/php.ini ${RUTA_DOCKER_WWW}
 }
 
 construye_cmd_docker (){
@@ -253,21 +255,10 @@ construye_imagen(){
 	log "## Construyendo imagen de docker: ${NOMBRE_IMAGEN}"
 	log "##  desde la ruta: ${RUTA_DOCKER}"
         CMD_BORRADO_IMAGEN="docker rmi -f ${NOMBRE_IMAGEN}"
-        #CMD_CREACION_IMAGEN="docker build -t ${NOMBRE_IMAGEN} ${RUTA_REPO_DOCKERS}"
         CMD_CREACION_IMAGEN="docker build -t ${NOMBRE_IMAGEN} ${RUTA_DOCKER}"
- 	#echo ${CMD_CREACION_IMAGEN}
 	log "##    ... borrado previo de la imagen"
-	#echo "Borrado previo de la imagen ${NOMBRE_IMAGEN}"
 	echo -e `${CMD_BORRADO_IMAGEN}`
-
-	#echo "el nombre de la imagen es: ${NOMBRE_IMAGEN}">>logimagen.txt
-	#echo "la ruta del Dockerfile es: ${RUTA_DOCKER}">>logimagen.txt
-	#echo "El comando para borrar la imagen es: ">>logimagen.txt
-	#echo "-> ${CMD_BORRADO_IMAGEN}">>logimagen.txt
-	#echo "El comando para crear la imagen es: ">>logimagen.txt
-	#echo "->  ${CMD_CREACION_IMAGEN}">>logimagen.txt
         log "##    ... Creando la imagen"	
-	#echo "Creacion de la imagen ${NOMBRE_IMAGEN}"
 	echo -e `${CMD_CREACION_IMAGEN}`
 	if [ $? -ne 0 ];
 	then
@@ -277,7 +268,6 @@ construye_imagen(){
       	  log "##"
       	  log "#######################################################"
       	  exit 122
-	
 	else
       	  log "#############################################"
       	  log ""
@@ -289,6 +279,69 @@ construye_imagen(){
      	  log ""
       	  log "---------------------------------------------"
 	fi
+}
+
+construye_imagen_www(){
+        log "##"
+        log "## Construyendo imagen de docker Web: ${NOMBRE_IMAGEN_WWW}"
+        log "##  desde la ruta: ${RUTA_DOCKER_WWW}"
+        CMD_BORRADO_IMAGEN="docker rmi -f ${NOMBRE_IMAGEN_WWW}"
+        #CMD_CREACION_IMAGEN="docker build -t ${NOMBRE_IMAGEN_WWW} ${RUTA_DOCKER}"
+        CMD_CREACION_IMAGEN="docker build -t ${NOMBRE_IMAGEN_WWW} ${RUTA_DOCKER_WWW}"
+        log "##    ... borrado previo de la imagen"
+        echo -e `${CMD_BORRADO_IMAGEN}`
+        log "##    ... Creando la imagen"
+        echo -e `${CMD_CREACION_IMAGEN}`
+        if [ $? -ne 0 ];
+        then
+          log "#######################################################"
+          log "##"
+          log "##!!!ERROR -  No se ha creado la imagen: ${NOMBRE_IMAGEN_WWW}"
+          log "##"
+          log "#######################################################"
+          exit 122
+        else
+          log "#############################################"
+          log ""
+          log "## Imagen: ${NOMBRE_IMAGEN_WWW} creada con exito!!! "
+          log "---------------------------------------------"
+          log ""
+          docker images |grep -i "REPOSITORY"
+          docker images |grep -i ${NOMBRE_IMAGEN_WWW}
+          log ""
+          log "---------------------------------------------"
+        fi
+}
+
+construye_imagen_bbdd(){
+        log "##"
+        log "## Construyendo imagen de docker: ${NOMBRE_IMAGEN_BBDD}"
+        log "##  desde la ruta: ${RUTA_DOCKER_BBDD}"
+        CMD_BORRADO_IMAGEN="docker rmi -f ${NOMBRE_IMAGEN_BBDD}"
+        CMD_CREACION_IMAGEN="docker build -t ${NOMBRE_IMAGEN_BBDD} ${RUTA_DOCKER_BBDD}"
+        log "##    ... borrado previo de la imagen"
+        echo -e `${CMD_BORRADO_IMAGEN}`
+        log "##    ... Creando la imagen"
+        echo -e `${CMD_CREACION_IMAGEN}`
+        if [ $? -ne 0 ];
+        then
+          log "#######################################################"
+          log "##"
+          log "##!!!ERROR -  No se ha creado la imagen: ${NOMBRE_IMAGEN_BBDD}"
+          log "##"
+          log "#######################################################"
+          exit 122
+        else
+          log "#############################################"
+          log ""
+          log "## Imagen: ${NOMBRE_IMAGEN_BBDD} creada con exito!!! "
+          log "---------------------------------------------"
+          log ""
+          docker images |grep -i "REPOSITORY"
+          docker images |grep -i ${NOMBRE_IMAGEN_SIN_TAG}
+          log ""
+          log "---------------------------------------------"
+        fi
 }
 
 userpass_web(){
@@ -321,7 +374,10 @@ fi
 
 backup_dockerfiles(){
  cp -r ${RUTA_DOCKER} ${BACKUP_RUTA_DOCKER}/${ID_UNICO_PROCESO}
+ #rm -rf ${RUTA_DOCKER}/*
  rm -rf ${RUTA_DOCKER}/*
+ mkdir ${RUTA_DOCKER_WWW}
+ mkdir ${RUTA_DOCKER_BBDD}
 
 }
 
@@ -397,8 +453,8 @@ ejecuta_compose(){
 parsea_docker_compose (){
 # Sustitucion template de docker-compose.yml
         #echo `sed 's/VAR_IMAGEN_BASE/'"${IMAGEN_BASE}"'/g' ${RUTA_TEMPLATES_DOCKER}/docker-compose.template > ${RUTA_DOCKER}/docker-compose.yml.01`
-        echo `sed 's/VAR_IMAGEN_BASE/'"${NOMBRE_IMAGEN}"'/g' ${RUTA_TEMPLATES_DOCKER}/docker-compose.template > ${RUTA_DOCKER}/docker-compose.yml.01`
-        echo "El comando para compose es: sed 's/VAR_IMAGEN_BASE/'"${NOMBRE_IMAGEN}"'/g' ${RUTA_TEMPLATES_DOCKER}/docker-compose.template > ${RUTA_DOCKER}/docker-compose.yml.01"
+        echo `sed 's/VAR_IMAGEN_BASE/'"${NOMBRE_IMAGEN_WWW}"'/g' ${RUTA_TEMPLATES_DOCKER}/docker-compose.template > ${RUTA_DOCKER}/docker-compose.yml.01`
+        echo "El comando para compose es: sed 's/VAR_IMAGEN_BASE/'"${NOMBRE_IMAGEN_WWW}"'/g' ${RUTA_TEMPLATES_DOCKER}/docker-compose.template > ${RUTA_DOCKER}/docker-compose.yml.01"
 
         VAR_RUTA_WEB_SIN_BARRAS=`echo ${PROD_RUTA_WEB}|sed 's/\//\\\\\//g'`
         VAR_RUTA_BBDD_SIN_BARRAS=`echo ${PROD_RUTA_MYSQL}|sed 's/\//\\\\\//g'`
@@ -406,6 +462,8 @@ parsea_docker_compose (){
         echo "La ruta WEB es: ${VAR_RUTA_WEB_SIN_BARRAS}"
         #echo `sed 's/VAR_RUTA_WEB/'"${VAR_RUTA_WEB_SIN_BARRAS}"'/g' ${RUTA_DOCKER}/docker-compose.yml.01 > ${RUTA_DOCKER}/docker-compose.yml`
         echo `sed 's/VAR_RUTA_WEB/'"${VAR_RUTA_WEB_SIN_BARRAS}"'/g' ${RUTA_DOCKER}/docker-compose.yml.01 |sed 's/VAR_RUTA_BBDD/'"${VAR_RUTA_BBDD_SIN_BARRAS}"'/g' > ${RUTA_DOCKER}/docker-compose.yml`
+	
+	rm ${RUTA_DOCKER}/docker-compose.yml.01
 
 
 

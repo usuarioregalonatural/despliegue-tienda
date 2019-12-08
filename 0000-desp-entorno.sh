@@ -69,6 +69,8 @@ echo "Creado usuario para acceso: ${USUARIO_ACCESO} ..."
         cd ${RUTA_DESPLIEGUE_BASE}
 	mkdir ${RUTA_DESPLIEGUE}
         mkdir ${RUTA_DESPLIEGUE}/docker
+	mkdir ${RUTA_DESPLIEGUE}/docker/web
+	mkdir ${RUTA_DESPLIEGUE}/docker/bbdd
         mkdir ${RUTA_DESPLIEGUE}/tienda
 	mkdir ${RUTA_DESPLIEGUE}/backup_dockers
 	mkdir ${RUTA_DESPLIEGUE}/logs
