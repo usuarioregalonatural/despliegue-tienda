@@ -19,14 +19,13 @@ services:
             - VAR_RUTA_WEB:/var/www/html/
         environment:
             - VIRTUAL_HOST=www.regalando1sonrisa.org,regalando1sonrisa.org
-        #    - VIRTUAL_PORT=8050
         links:
             - db:db
         networks:
             - default
     db:
         image: mysql:5.7
-        container_name: tienda-mysql
+        container_name: VAR_CONT_MYSQL
         ports:
             - "33060:3306"
         command: --default-authentication-plugin=mysql_native_password
