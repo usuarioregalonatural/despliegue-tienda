@@ -10,6 +10,23 @@ de prod-bbdd y prod-web a test-bbdd y test-web para que tengan contenido
 * Las imagenes no se ven cuando se despliega porque el backup tiene url amigables
 hay que entrar al backoffice y desactivarlas para que las imagenes se vean bien.
 
+
+## TIPS
+
+- en la ruta de la web -> **config/defines.inc.php** se puede cambiar para ejecutar en 
+modo desarrollo y poder ver errores:
+
+``` 
+/* Debug only */
+if (!defined('_PS_MODE_DEV_')) {
+define('_PS_MODE_DEV_', true);
+}```
+
+cambiar a true o false si queremos ver o no los errores
+
+
+
+
 ## Siguiente mejora (Hecho!)
 
 Se independiza la bbdd en un docker distinto. También PHPMyAdmin
@@ -36,4 +53,47 @@ habrá que indicarla en el host el nombre del docker de MySQL.
 * Falta realizar esta sustitución automáticamente.
 
 * Falta poder ejecutar sql dentro del docker para asignar correctamente dominio y SSL/noSSL
+
+
+
+
+
+## TIPS
+Podemos comprobar la conexion de la web con la base de datos creando el siguiente fichero en la ruta de la web:
+
+<?php
+
+define("DB_HOST", "tienda-mysql");//DB_HOST:  generalmente suele ser "127.0.0.1"
+define("DB_NAME", "mysql");//Nombre de la base de datos
+define("DB_USER", "root");//Usuario de tu base de datos
+define("DB_PASS", "password");//Contraseña del usuario de la base de datos
+
+        # conectare la base de datos
+    $con=@mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    if(!$con){
+        die("imposible conectarse: ".mysqli_error($con));
+    }
+    if (@mysqli_connect_errno()) {
+        die("Conexión falló: ".mysqli_connect_errno()." : ". mysqli_connect_error());
+    }
+
+?>
+<table border="1">
+<?php
+
+ $sql=mysqli_query($con, "select host, user from mysql.user;");
+    while ($row=mysqli_fetch_array($sql)) {
+        $host = $row["host"];
+        $user = $row["user"];
+        ?>
+        <tr>
+        <td><?php echo $host ?></td>
+        <td ><?php echo $user ?></td>
+                </tr>
+        <?php
+    }
+?>
+</table>
+<?php
+?>
 
