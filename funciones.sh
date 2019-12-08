@@ -33,21 +33,20 @@ parsea_dominio () {
 	#echo "El entorno es: ${URL_TIENDA}"
 	 if [ ${ES_SSL} = "SSL" ]
 	 then
-   		echo `sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' ${RUTA_TEMPLATES_DOCKER}/mysql-ssl.sql.template |sed 's/value=0/value=1/g' > ${RUTA_DOCKER}/mysql-ssl.sql`
+   		echo `sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' ${RUTA_TEMPLATES_DOCKER}/mysql-ssl.sql.template |sed 's/value=0/value=1/g' > ${RUTA_DOCKER_BBDD}/mysql-ssl.sql`
     		echo `sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' ${RUTA_TEMPLATES_DOCKER}/000-default.conf.SSL.template > ${RUTA_DOCKER_WWW}/000-default.conf`
     		#echo `sed 's/VAR_SSL/''/g' ${RUTA_TEMPLATES_DOCKER}/Dockerfile.template|sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' > ${RUTA_DOCKER}/Dockerfile`
-    		echo `sed 's/VAR_SSL/''/g' ${RUTA_TEMPLATES_DOCKER}/Dockerfile-Web.template|sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' > ${RUTA_DOCKER_WWW}/Dockerfile`
+    		echo `sed 's/VAR_SSL/''/g' ${RUTA_TEMPLATES_DOCKER}/Dockerfile-Web.template|sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g'|sed 's/VAR_IMAGEN_BASE_WWW/'"${IMAGEN_BASE_WWW}"'/g' > ${RUTA_DOCKER_WWW}/Dockerfile`
   	else 
-    		echo `sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' ${RUTA_TEMPLATES_DOCKER}/mysql-ssl.sql.template |sed 's/value=1/value=0/g' > ${RUTA_DOCKER}/mysql-ssl.sql`
+    		echo `sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' ${RUTA_TEMPLATES_DOCKER}/mysql-ssl.sql.template |sed 's/value=1/value=0/g' > ${RUTA_DOCKER_BBDD}/mysql-ssl.sql`
     		echo `sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' ${RUTA_TEMPLATES_DOCKER}/000-default.conf.noSSL.template > ${RUTA_DOCKER_WWW}/000-default.conf`
     		#echo `sed 's/VAR_SSL/'#'/g' ${RUTA_TEMPLATES_DOCKER}/Dockerfile.template|sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' > ${RUTA_DOCKER}/Dockerfile`
-    		echo `sed 's/VAR_SSL/'#'/g' ${RUTA_TEMPLATES_DOCKER}/Dockerfile-Web.template|sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' > ${RUTA_DOCKER_WWW}/Dockerfile`
-    		echo "sed 's/VAR_SSL/'#'/g' ${RUTA_TEMPLATES_DOCKER}/Dockerfile-Web.template|sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' > ${RUTA_DOCKER_WWW}/Dockerfile"
+    		echo `sed 's/VAR_SSL/'#'/g' ${RUTA_TEMPLATES_DOCKER}/Dockerfile-Web.template|sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g'|sed 's/VAR_IMAGEN_BASE_WWW/'"${IMAGEN_BASE_WWW}"'/g' > ${RUTA_DOCKER_WWW}/Dockerfile`
   	fi
 
   	echo `sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' ${RUTA_TEMPLATES_DOCKER}/fqdn.conf.template > ${RUTA_DOCKER_WWW}/fqdn.conf`
   	echo `sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' ${RUTA_TEMPLATES_DOCKER}/default-ssl.conf.template > ${RUTA_DOCKER_WWW}/default-ssl.conf`
-  	echo `sed 's/VAR_WEB_USER/'"${USER_WEB}"'/g' ${RUTA_TEMPLATES_DOCKER}/mysqlconfig.cnf.template |sed 's/VAR_PASS_USER/'"${PASS_WEB}"'/g' > ${RUTA_DOCKER}/mysqlconfig.cnf`
+  	echo `sed 's/VAR_WEB_USER/'"${USER_WEB}"'/g' ${RUTA_TEMPLATES_DOCKER}/mysqlconfig.cnf.template |sed 's/VAR_PASS_USER/'"${PASS_WEB}"'/g' > ${RUTA_DOCKER_BBDD}/mysqlconfig.cnf`
 
 # Sustitucion template de docker-compose.yml	
 
@@ -316,10 +315,10 @@ construye_imagen_www(){
 
 construye_imagen_bbdd(){
         log "##"
-        log "## Construyendo imagen de docker: ${NOMBRE_IMAGEN}"
-        log "##  desde la ruta: ${RUTA_DOCKER}"
-        CMD_BORRADO_IMAGEN="docker rmi -f ${NOMBRE_IMAGEN}"
-        CMD_CREACION_IMAGEN="docker build -t ${NOMBRE_IMAGEN} ${RUTA_DOCKER}"
+        log "## Construyendo imagen de docker: ${NOMBRE_IMAGEN_BBDD}"
+        log "##  desde la ruta: ${RUTA_DOCKER_BBDD}"
+        CMD_BORRADO_IMAGEN="docker rmi -f ${NOMBRE_IMAGEN_BBDD}"
+        CMD_CREACION_IMAGEN="docker build -t ${NOMBRE_IMAGEN_BBDD} ${RUTA_DOCKER_BBDD}"
         log "##    ... borrado previo de la imagen"
         echo -e `${CMD_BORRADO_IMAGEN}`
         log "##    ... Creando la imagen"
@@ -328,14 +327,14 @@ construye_imagen_bbdd(){
         then
           log "#######################################################"
           log "##"
-          log "##!!!ERROR -  No se ha creado la imagen: ${NOMBRE_IMAGEN}"
+          log "##!!!ERROR -  No se ha creado la imagen: ${NOMBRE_IMAGEN_BBDD}"
           log "##"
           log "#######################################################"
           exit 122
         else
           log "#############################################"
           log ""
-          log "## Imagen: ${NOMBRE_IMAGEN} creada con exito!!! "
+          log "## Imagen: ${NOMBRE_IMAGEN_BBDD} creada con exito!!! "
           log "---------------------------------------------"
           log ""
           docker images |grep -i "REPOSITORY"

@@ -1,6 +1,7 @@
 #FROM vicsoft01/ubuntu-apache-php-mysql-prestashop.1.7.3.2:1.0
 #FROM vicsoft01/ubuntu-apache-php-mysql:1.1
-FROM vicsoft01/ubuntu18.04-apache2.2-php7.3.11:latest
+#FROM vicsoft01/ubuntu18.04-apache2.2-php7.3.11:latest
+FROM VAR_IMAGEN_BASE_WWW
 
 MAINTAINER VICSOFT
 
@@ -9,7 +10,7 @@ ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 COPY ./000-default.conf /etc/apache2/sites-available
 COPY ./default-ssl.conf /etc/apache2/sites-available
 COPY ./fqdn.conf /etc/apache2/conf-available
-COPY ./php.ini /etc/php/7.1/apache2
+COPY ./php.ini /etc/php/7.3/apache2
 #COPY ./mysqlconfig.cnf /
 #COPY ./mysql-ssl.sql /
 
