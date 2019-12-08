@@ -16,11 +16,12 @@ hay que entrar al backoffice y desactivarlas para que las imagenes se vean bien.
 - en la ruta de la web -> **config/defines.inc.php** se puede cambiar para ejecutar en 
 modo desarrollo y poder ver errores:
 
-``` 
+``` php 
 /* Debug only */
 if (!defined('_PS_MODE_DEV_')) {
 define('_PS_MODE_DEV_', true);
-}```
+}
+```
 
 cambiar a true o false si queremos ver o no los errores
 
@@ -40,14 +41,17 @@ Principalmente se ha personalizado la imagen de la web
 * Ojo, cuando ejecuta MySQL no es posible conectar con root desde PhpMyAdmin, 
 es necesario meterse dentro del docker de mysql y ejecutar
 
-``` mysql -u root -p ```
+```bash
+mysql -u root -p 
+```
 introducir la password de root y salir.
 Esto generará el usuario root con host=% y ya nos permitirá acceder con normalidad
 
 También hay que hacer una modificación en el fichero web:
 
+```php
 app/config/parameters.php
-
+```
 habrá que indicarla en el host el nombre del docker de MySQL.
 
 * Falta realizar esta sustitución automáticamente.
@@ -60,7 +64,7 @@ habrá que indicarla en el host el nombre del docker de MySQL.
 
 ## TIPS
 Podemos comprobar la conexion de la web con la base de datos creando el siguiente fichero en la ruta de la web:
-
+```php
 <?php
 
 define("DB_HOST", "tienda-mysql");//DB_HOST:  generalmente suele ser "127.0.0.1"
@@ -96,4 +100,4 @@ define("DB_PASS", "password");//Contraseña del usuario de la base de datos
 </table>
 <?php
 ?>
-
+```
