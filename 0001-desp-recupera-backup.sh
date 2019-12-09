@@ -21,8 +21,15 @@ echo ""
 #	cp -r /home/temp/20191116 ${RUTA_TEMP}
 	cd ${RUTA_TIENDA}
 
-	git clone ${GIT_TIENDA_WEB}
-        mv ${WEB_GIT} web-prod	
+### solo para recuperar una existente en GIT
+### para una en blanco comentar las dos siguientes lineas
+	git clone ${GIT_TIENDA_WEB} # solo para recuperar una existente en git
+        mv ${WEB_GIT} web-prod # solo para recuperar una existente en git
+
+
+#	mkdir web-prod #solo para utilizar una web en blanco	
+
+
 #	git clone https://github.com/usuarioregalonatural/web-prod.git
 	cd -
 

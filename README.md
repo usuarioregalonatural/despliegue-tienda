@@ -113,3 +113,13 @@ define("DB_PASS", "password");//Contraseña del usuario de la base de datos
 <?php
 ?>
 ```
+
+
+## ISSUES
+
+Durante el despliegue de la tienda, la primera vez que ejecutamos LANZA_TIENDA.sh, no realiza operaciones en Mysql devolviendo un error de docker.
+El truquillo es, desde PHPMyAdmin, conectar con root y volver a lanzar LANZA_TIENDA.sh. Después de esto funciona bien.
+
+
+
+
