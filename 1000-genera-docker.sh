@@ -69,7 +69,7 @@ construye_imagen_www
 ejecuta_compose
 
 ## Esperamos 15 segundos a que la bbdd se cree completamente
-sleep 20
+sleep 2
 activarootmysql
 create_db_regalonatural
 ### Esta parte si queremos recuperar los datos anterioes
