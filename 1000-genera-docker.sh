@@ -70,13 +70,22 @@ ejecuta_compose
 
 ## Esperamos 15 segundos a que la bbdd se cree completamente
 sleep 2
-activarootmysql
-create_db_regalonatural
-### Esta parte si queremos recuperar los datos anterioes
-restore_db_regalonatural
-setear_dominio_ssl
-# si queremos una instalacion nueva, comentar las dos lineas
 
+if [ "${ES_NUEVA_INSTALACION}" == "NUEVA" ];
+then 
+	log "###################################################"
+	log "##     NUEVA INSTALACION. SE BORRA LO ANTERIOR   ##"
+	log "###################################################"
+
+	activarootmysql
+	create_db_regalonatural
+	### Esta parte si queremos recuperar los datos anterioes
+	restore_db_regalonatural
+	setear_dominio_ssl
+	# si queremos una instalacion nueva, comentar las dos lineas
+else
+	log "#### No es una nueva instalacion. Estamos reiniciando..."
+fi
 
 muestra_variables
 asigna_permisos_web

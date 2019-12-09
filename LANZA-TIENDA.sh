@@ -91,6 +91,14 @@ else
         exit 122
 fi
 
+if [ "$3" == "NUEVA" ];
+then
+     export ES_NUEVA_INSTALACION="NUEVA"
+else
+     export ES_NUEVA_INSTALACION=""
+fi
+ 
+
 export ES_SSL ENTORNO_UPPER PUERTO_SSL ENTORNO SUFIJO_NOMBRE_CONTENEDOR
 log "#############################################"
 log "##                                         "
@@ -109,6 +117,8 @@ log "#############################################"
 #echo "ES_SSL=${ES_SSL}"
 #echo "PUERTO_SSL=${PUERTO_SSL}"
 #echo "URL_TIENDA=${URL_TIENDA}"
+
+./reiniciadockers
 
 ./1000-genera-docker.sh ${ES_SSL} ${ENTORNO_UPPER}
 
