@@ -22,15 +22,11 @@ existe_usuario () {
 
 
 parsea_dominio () {
+	userpass_web
 	log "## "
 	log "## Parseando valores...."
 	log "##"
-	
-	userpass_web
-	#echo "el valor de ssl es : ${ES_SSL} "
 	log "## "
-	log "## Parseando los templates"
-	#echo "El entorno es: ${URL_TIENDA}"
 	 if [ ${ES_SSL} = "SSL" ]
 	 then
    		echo `sed 's/VAR_DOMINIO/'"${URL_TIENDA}"'/g' ${RUTA_TEMPLATES_DOCKER}/mysql-ssl.sql.template |sed 's/value=0/value=1/g' > ${RUTA_DOCKER_BBDD}/mysql-ssl.sql`
@@ -50,16 +46,7 @@ parsea_dominio () {
 
 # Sustitucion template de docker-compose.yml	
 
-parsea_docker_compose
-
-#	echo `sed 's/VAR_IMAGEN_BASE/'"${IMAGEN_BASE}"'/g' ${RUTA_TEMPLATES_DOCKER}/docker-compose.template > ${RUTA_DOCKER}/docker-compose.yml.01`	
-#echo "La ruta WEB es: ${PROD_RUTA_WEB}"
-
-#	VAR_RUTA_WEB_SIN_BARRAS=`echo ${PROD_RUTA_WEB}|sed 's/\//\\\\\//g'`
-#	echo "La ruta WEB es: ${VAR_RUTA_WEB_SIN_BARRAS}"
-#	echo `sed 's/VAR_RUTA_WEB/'"${VAR_RUTA_WEB_SIN_BARRAS}"'/g' ${RUTA_DOCKER}/docker-compose.yml.01 > ${RUTA_DOCKER}/docker-compose.yml`	
-
-
+	parsea_docker_compose
 
 	log "## Fin del parseo de templates"
 	log "##"
@@ -452,15 +439,11 @@ ejecuta_compose(){
 
 parsea_docker_compose (){
 # Sustitucion template de docker-compose.yml
-        #echo `sed 's/VAR_IMAGEN_BASE/'"${IMAGEN_BASE}"'/g' ${RUTA_TEMPLATES_DOCKER}/docker-compose.template > ${RUTA_DOCKER}/docker-compose.yml.01`
         echo `sed 's/VAR_IMAGEN_BASE/'"${NOMBRE_IMAGEN_WWW}"'/g' ${RUTA_TEMPLATES_DOCKER}/docker-compose.template > ${RUTA_DOCKER}/docker-compose.yml.01`
-        echo "El comando para compose es: sed 's/VAR_IMAGEN_BASE/'"${NOMBRE_IMAGEN_WWW}"'/g' ${RUTA_TEMPLATES_DOCKER}/docker-compose.template > ${RUTA_DOCKER}/docker-compose.yml.01"
 
         VAR_RUTA_WEB_SIN_BARRAS=`echo ${PROD_RUTA_WEB}|sed 's/\//\\\\\//g'`
         VAR_RUTA_BBDD_SIN_BARRAS=`echo ${PROD_RUTA_MYSQL}|sed 's/\//\\\\\//g'`
 
-        echo "La ruta WEB es: ${VAR_RUTA_WEB_SIN_BARRAS}"
-        #echo `sed 's/VAR_RUTA_WEB/'"${VAR_RUTA_WEB_SIN_BARRAS}"'/g' ${RUTA_DOCKER}/docker-compose.yml.01 > ${RUTA_DOCKER}/docker-compose.yml`
         echo `sed 's/VAR_RUTA_WEB/'"${VAR_RUTA_WEB_SIN_BARRAS}"'/g' ${RUTA_DOCKER}/docker-compose.yml.01 |sed 's/VAR_RUTA_BBDD/'"${VAR_RUTA_BBDD_SIN_BARRAS}"'/g'|sed 's/VAR_CONT_MYSQL/'"${VAR_CONT_MYSQL}"'/g' > ${RUTA_DOCKER}/docker-compose.yml`
 	
 	rm ${RUTA_DOCKER}/docker-compose.yml.01
@@ -473,12 +456,25 @@ parsea_activacion_root_mysql () {
 
 parsea_seteo_dominio_ssl () {
  VAR_RUTA_DOCKER_BBDD_SIN_BARRAS=`echo ${RUTA_DOCKER_BBDD}|sed 's/\//\\\\\//g'`
- log "--> parsesao seteo domionio"
  echo `sed 's/VAR_CONT_MYSQL/'"${VAR_CONT_MYSQL}"'/g' ${RUTA_TEMPLATES_DOCKER}/setear_dominio_ssl.sh.template|sed 's/VAR_RUTA_DOCKER_BBDD/'"${VAR_RUTA_DOCKER_BBDD_SIN_BARRAS}"'/g' > ${RUTA_DOCKER_BBDD}/setear_dominio_ssl.sh`
- #echo "sed 's/VAR_CONT_MYSQL/'"${VAR_CONT_MYSQL}"'/g' ${RUTA_TEMPLATES_DOCKER}/setear_dominio_ssl.sh.template|sed 's/VAR_RUTA_DOCKER_BBDD/'"${RUTA_DOCKER_BBDD}"'/g' > ${RUTA_DOCKER_BBDD}/setear_dominio_ssl.sh"
- log "--> parsesao seteo domionio"
 
 }
+
+parsea_create_db_regalonatural () {
+ echo `sed 's/VAR_CONT_MYSQL/'"${VAR_CONT_MYSQL}"'/g' ${RUTA_TEMPLATES_DOCKER}/creadbregalonatural.sh.template > ${RUTA_DOCKER_BBDD}/creadbregalonatural.sh`
+}
+
+parsea_restore_db_regalonatural () {
+ VAR_RUTA_WEB_SIN_BARRAS=`echo ${PROD_RUTA_WEB}|sed 's/\//\\\\\//g'`
+ VAR_FILE_BCKSQL_REGALONATURAL="${VAR_RUTA_WEB_SIN_BARRAS}\/${SQL_BBDD}"
+ echo "VAR_RUTA_WEB_SIN_BARRAS = ${VAR_RUTA_WEB_SIN_BARRAS}"
+ echo "SQL_BBDD = ${SQL_BBDD}"
+ echo "VAR_FILE_BCKSQL_REGALONATURAL= ${VAR_FILE_BCKSQL_REGALONATURAL}"
+
+ echo `sed 's/VAR_CONT_MYSQL/'"${VAR_CONT_MYSQL}"'/g' ${RUTA_TEMPLATES_DOCKER}/restoreregalonatural.sh.template|sed 's/VAR_FILE_BCKSQL_REGALONATURAL/'"${VAR_FILE_BCKSQL_REGALONATURAL}"'/g' > ${RUTA_DOCKER_BBDD}/restoreregalonatural.sh`
+
+}
+
 
 activarootmysql () {
        log ""
@@ -494,6 +490,38 @@ activarootmysql () {
        log ""
        log ""
  
+}
+
+create_db_regalonatural () {
+       log ""
+       log "##"
+       log "###############################################################"
+       log "##             CREANDO BBDD REGALONATURAL                    ##"
+
+
+       echo -e `bash ${RUTA_DOCKER_BBDD}/creadbregalonatural.sh`
+
+       log "##"
+       log "###############################################################"
+       log ""
+       log ""
+
+}
+
+restore_db_regalonatural () {
+       log ""
+       log "##"
+       log "###############################################################"
+       log "##           RESTAURANDO BBDD REGALONATURAL                  ##"
+
+
+       echo -e `bash ${RUTA_DOCKER_BBDD}/restoreregalonatural.sh`
+
+       log "##"
+       log "###############################################################"
+       log ""
+       log ""
+
 }
 
 setear_dominio_ssl (){
@@ -512,3 +540,6 @@ setear_dominio_ssl (){
        log ""
 }
 
+asigna_permisos_web () {
+	chmod 777 -R ${RUTA_TIENDA}
+}

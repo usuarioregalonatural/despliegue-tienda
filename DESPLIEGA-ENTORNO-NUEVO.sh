@@ -18,6 +18,9 @@ clear
 #	./0003-desp-restaura-web-tienda.sh
 
 # Restaura los datos de la base de datos de produccion de la tienda
-	./0004-desp-restaura-bbdd-tienda.sh
+	
+	./0005-desp-recupera-bbdd-tienda.sh
+
+#./0004-desp-restaura-bbdd-tienda.sh
 
 

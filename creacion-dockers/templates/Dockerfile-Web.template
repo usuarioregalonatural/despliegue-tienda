@@ -19,7 +19,7 @@ VAR_SSLCOPY ./certificate.ca.crt /etc/apache2/ssl
 VAR_SSLCOPY ./VAR_DOMINIO.key /etc/apache2/ssl
 
 RUN a2enconf fqdn
-
+RUN a2enmod rewrite
 VAR_SSLRUN a2enmod ssl
 VAR_SSLRUN a2ensite default-ssl
 

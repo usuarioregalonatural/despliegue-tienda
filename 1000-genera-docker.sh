@@ -52,24 +52,33 @@ export NOMBRE_IMAGEN_BBDD="${ENTORNO}regnatbbdd"
 
 
 backup_dockerfiles
-
+# parseo de variables
 parsea_dominio
 parsea_htaccess
 parsea_activacion_root_mysql
 parsea_seteo_dominio_ssl
+parsea_create_db_regalonatural
+parsea_restore_db_regalonatural
+
 copia_base_files
 recoge_cert_ssl
 
-#construye_imagen
 construye_imagen_www
-eliminar_contenedor 
-
-construye_cmd_docker
+#eliminar_contenedor 
+#construye_cmd_docker
 ejecuta_compose
-#ejecuta_docker
+
+## Esperamos 15 segundos a que la bbdd se cree completamente
+sleep 20
 activarootmysql
+create_db_regalonatural
+### Esta parte si queremos recuperar los datos anterioes
+restore_db_regalonatural
 setear_dominio_ssl
+# si queremos una instalacion nueva, comentar las dos lineas
+
 
 muestra_variables
+asigna_permisos_web
 
 
