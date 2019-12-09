@@ -60,6 +60,39 @@ habrá que indicarla en el host el nombre del docker de MySQL.
 
 * Incluido recuperación del dump de la bbdd regalonatural
 
+## COMPATIBILIDAD DE WEB CON PHP
+Para que funcione correctamente, es necesario realizar varios cambios en el código web:
+
+- Archivo: controllers/admin/AdminDashboardController.php
+
+Linea 43: Incluir parametro en la funcion:
+```php
+AdminControllerCore::setMedia(**$isNewTheme = false**)
+```
+
+- Archivo: controllers/admin/AdminLoginController.php
+
+Linea 164: Incluir parametro en la funcion:
+```php
+ public function viewAccess(**$disable = false**)
+```
+
+- Archivo: controllers/admin/AdminLoginController.php
+
+Linea 47: Incluir parametro en la funcion:
+```php
+ public function setMedia(**$isNewTheme = false**)
+```
+
+- Archivo: modules/appagebuilder/controllers/admin/AdminApPageBuilderPositions.php
+
+Linea 425: Incluir parametro en la funcion:
+```php
+ public function setMedia(**$isNewTheme = false**)
+```
+
+
+
 
 ## TIPS
 

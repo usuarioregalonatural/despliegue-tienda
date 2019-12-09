@@ -24,5 +24,11 @@ echo ""
 	git clone ${GIT_TIENDA_WEB}
         mv ${WEB_GIT} web-prod	
 #	git clone https://github.com/usuarioregalonatural/web-prod.git
-	cd -
 
+#### Añadido para recuperar y descomprimier el volvado de la base de datos
+
+	cd web-prod
+	gzip -d ${SQL_BBDD}.gz
+####
+
+	cd ${RUTA_TIENDA}
