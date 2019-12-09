@@ -51,3 +51,15 @@ services:
             MYSQL_ROOT_PASSWORD: vmsn2004
         networks:
             - default
+    imagenes:
+        image: VAR_IMAGEN_BASE
+        container_name: tienda-imagenes
+        ports:
+            - 8055:80
+        volumes:
+            - VAR_RUTA_IMAGENES:/var/www/html/
+        environment:
+            - VIRTUAL_HOST=imagenes.regalonatural.com
+        networks:
+            - default
+ 

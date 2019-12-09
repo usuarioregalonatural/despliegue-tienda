@@ -443,8 +443,9 @@ parsea_docker_compose (){
 
         VAR_RUTA_WEB_SIN_BARRAS=`echo ${PROD_RUTA_WEB}|sed 's/\//\\\\\//g'`
         VAR_RUTA_BBDD_SIN_BARRAS=`echo ${PROD_RUTA_MYSQL}|sed 's/\//\\\\\//g'`
+        VAR_RUTA_IMAGENES_SIN_BARRAS=`echo ${RUTA_IMAGENES}|sed 's/\//\\\\\//g'`
 
-        echo `sed 's/VAR_RUTA_WEB/'"${VAR_RUTA_WEB_SIN_BARRAS}"'/g' ${RUTA_DOCKER}/docker-compose.yml.01 |sed 's/VAR_RUTA_BBDD/'"${VAR_RUTA_BBDD_SIN_BARRAS}"'/g'|sed 's/VAR_CONT_MYSQL/'"${VAR_CONT_MYSQL}"'/g' > ${RUTA_DOCKER}/docker-compose.yml`
+        echo `sed 's/VAR_RUTA_WEB/'"${VAR_RUTA_WEB_SIN_BARRAS}"'/g' ${RUTA_DOCKER}/docker-compose.yml.01 |sed 's/VAR_RUTA_BBDD/'"${VAR_RUTA_BBDD_SIN_BARRAS}"'/g'|sed 's/VAR_CONT_MYSQL/'"${VAR_CONT_MYSQL}"'/g'|sed 's/VAR_RUTA_IMAGENES/'"${VAR_RUTA_IMAGENES_SIN_BARRAS}"'/g' > ${RUTA_DOCKER}/docker-compose.yml`
 	
 	rm ${RUTA_DOCKER}/docker-compose.yml.01
 }
