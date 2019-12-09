@@ -56,11 +56,23 @@ habrá que indicarla en el host el nombre del docker de MySQL.
 
 * Falta realizar esta sustitución automáticamente.
 
-* Falta poder ejecutar sql dentro del docker para asignar correctamente dominio y SSL/noSSL
+* Falta poder ejecutar sql dentro del docker para asignar correctamente dominio y SSL/noSSL (Hecho!)
+
+* Incluido recuperación del dump de la bbdd regalonatural
 
 
+## TIPS
 
+Para realizar un volcado de los datos de mysql o una restauracion:
 
+*Backup*
+```bash
+docker exec CONTAINER /usr/bin/mysqldump -u root --password=root DATABASE > backup.sql
+```
+*Restore*
+```bash
+cat backup.sql | docker exec -i CONTAINER /usr/bin/mysql -u root --password=root DATABASE
+```
 
 ## TIPS
 Podemos comprobar la conexion de la web con la base de datos creando el siguiente fichero en la ruta de la web:

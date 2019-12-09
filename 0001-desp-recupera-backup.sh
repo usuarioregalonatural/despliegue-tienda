@@ -18,8 +18,11 @@ echo ""
         scp -r -P ${HOST_BACKUP_PUERTO} ${HOST_BACKUP_NOMBRE}:${FILEUSERCONNECT} ${RUTA_TEMP}
 
 	# Comentar para realizar la descarga del backup desde remoto
-	cp -r /home/temp/20191116 ${RUTA_TEMP}
+#	cp -r /home/temp/20191116 ${RUTA_TEMP}
 	cd ${RUTA_TIENDA}
-	git clone https://github.com/usuarioregalonatural/web-prod.git
+
+	git clone ${GIT_TIENDA_WEB}
+        mv ${WEB_GIT} web-prod	
+#	git clone https://github.com/usuarioregalonatural/web-prod.git
 	cd -
 
