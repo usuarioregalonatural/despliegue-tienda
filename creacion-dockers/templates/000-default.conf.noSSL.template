@@ -18,3 +18,11 @@
 AllowOverride All
 </Directory>
 
+# Esto es necesario para activar las URL amigables
+<Directory /var/www/html>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride All
+        Order allow,deny
+        allow from all
+</Directory>
+
