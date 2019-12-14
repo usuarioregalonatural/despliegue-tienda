@@ -196,6 +196,7 @@ copia_base_files(){
 	cp ${RUTA_DOCKER_BASEFILES}/ejecuta.sh ${RUTA_DOCKER_WWW}
 #	cp ${RUTA_DOCKER_BASEFILES}/mysqlconfig.cnf ${RUTA_DOCKER}
 	cp ${RUTA_DOCKER_BASEFILES}/php.ini ${RUTA_DOCKER_WWW}
+	cp ${RUTA_DOCKER_BASEFILES}/apache2.conf ${RUTA_DOCKER_WWW}
 }
 
 construye_cmd_docker (){
