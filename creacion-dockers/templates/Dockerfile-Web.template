@@ -15,9 +15,10 @@ COPY ./apache2.conf /etc/apache2
 #COPY ./mysqlconfig.cnf /
 #COPY ./mysql-ssl.sql /
 
-VAR_SSLCOPY ./VAR_DOMINIO.crt /etc/apache2/ssl
-VAR_SSLCOPY ./certificate.ca.crt /etc/apache2/ssl
-VAR_SSLCOPY ./VAR_DOMINIO.key /etc/apache2/ssl
+VAR_SSLRUN mkdir /etc/apache2/ssl
+VAR_SSLCOPY ./certs/VAR_DOMINIO.crt /etc/apache2/ssl
+VAR_SSLCOPY ./certs/certificate.ca.crt /etc/apache2/ssl
+VAR_SSLCOPY ./certs/VAR_DOMINIO.key /etc/apache2/ssl
 
 RUN a2enconf fqdn
 RUN a2enmod rewrite

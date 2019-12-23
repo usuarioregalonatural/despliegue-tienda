@@ -32,6 +32,10 @@ then
         export PARAM_VIRTUAL_PROTO="-e VIRTUAL_PROTO=${VIRTUAL_PROTO}"
         export PARAM_VIRTUAL_PORT="-e VIRTUAL_PORT=${VIRTUAL_PORT}"
         export PARAM_RUTA_SSL="-v ${RUTA_SSL}:/etc/apache2/ssl"
+
+        export PARAM_VIRTUAL_PROTO="- VIRTUAL_PROTO=${VIRTUAL_PROTO}"
+	export PARAM_VIRTUAL_PORT="- VIRTUAL_PORT=${VIRTUAL_PORT}"
+
 	#log "...el protocolo es SSL"
 	#echo "--> Se ha seleccionado como SSL"
         # Comprobamos que entorno es el elegido

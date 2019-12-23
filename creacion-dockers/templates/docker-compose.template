@@ -5,6 +5,7 @@ services:
         container_name: vic-nginx-proxy
         ports:
           - "80:80"
+          VAR_SSL_NGINX
         volumes:
           - /var/run/docker.sock:/tmp/docker.sock:ro
           - ./certs:/etc/nginx/certs
@@ -18,7 +19,9 @@ services:
         volumes:
             - VAR_RUTA_WEB:/var/www/html/
         environment:
-            - VIRTUAL_HOST=www.regalando1sonrisa.org,regalando1sonrisa.org
+            - VIRTUAL_HOST=www.VAR_DOMINIO,VAR_DOMINIO
+            VAR_PARAM_VIRTUAL_PROTO
+            VAR_PARAM_VIRTUAL_PORT
         links:
             - db:db
         networks:
