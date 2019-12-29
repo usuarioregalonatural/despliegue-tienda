@@ -349,9 +349,9 @@ recoge_cert_ssl(){
 	log "###     Recogiendo certificados SSL del servidor     ###"
 	log "########################################################"
         scp -r -P ${HOST_BACKUP_PUERTO} ${HOST_BACKUP_NOMBRE}:${HOST_CERT_SSL} ${RUTA_TEMP}
-        cp ${RUTA_TEMP}/${URL_TIENDA}/${URL_TIENDA}.crt ${RUTA_DOCKER_WWW}/certs
-        cp ${RUTA_TEMP}/${URL_TIENDA}/${URL_TIENDA}.key ${RUTA_DOCKER_WWW}/certs
-        cp ${RUTA_TEMP}/${URL_TIENDA}/certificate.ca.crt ${RUTA_DOCKER_WWW}/certs
+        cp ${RUTA_TEMP}/${URL_TIENDA}/${URL_TIENDA}.crt ${RUTA_DOCKER_WWW}
+        cp ${RUTA_TEMP}/${URL_TIENDA}/${URL_TIENDA}.key ${RUTA_DOCKER_WWW}
+        cp ${RUTA_TEMP}/${URL_TIENDA}/certificate.ca.crt ${RUTA_DOCKER_WWW}
 
 else
 	log "########################################################"
@@ -448,16 +448,8 @@ parsea_docker_compose (){
         VAR_RUTA_BBDD_SIN_BARRAS=`echo ${PROD_RUTA_MYSQL}|sed 's/\//\\\\\//g'`
         VAR_RUTA_IMAGENES_SIN_BARRAS=`echo ${RUTA_IMAGENES}|sed 's/\//\\\\\//g'`
 
-	if [ ${ES_SSL} = "SSL" ]
-	then
-		VAR_SSL_NGINX="- \"443:443\""
-	else
-		VAR_SSL_NGINX=""
-	fi
+        echo `sed 's/VAR_RUTA_WEB/'"${VAR_RUTA_WEB_SIN_BARRAS}"'/g' ${RUTA_DOCKER}/docker-compose.yml.01 |sed 's/VAR_RUTA_BBDD/'"${VAR_RUTA_BBDD_SIN_BARRAS}"'/g'|sed 's/VAR_CONT_MYSQL/'"${VAR_CONT_MYSQL}"'/g'|sed 's/VAR_RUTA_IMAGENES/'"${VAR_RUTA_IMAGENES_SIN_BARRAS}"'/g'|sed 's/VAR_DOMINIO_TIENDA/'"${DOMINIO_TIENDA}"'/g' > ${RUTA_DOCKER}/docker-compose.yml`
 
-        #echo `sed 's/VAR_RUTA_WEB/'"${VAR_RUTA_WEB_SIN_BARRAS}"'/g' ${RUTA_DOCKER}/docker-compose.yml.01 |sed 's/VAR_RUTA_BBDD/'"${VAR_RUTA_BBDD_SIN_BARRAS}"'/g'|sed 's/VAR_CONT_MYSQL/'"${VAR_CONT_MYSQL}"'/g'|sed 's/VAR_RUTA_IMAGENES/'"${VAR_RUTA_IMAGENES_SIN_BARRAS}"'/g' > ${RUTA_DOCKER}/docker-compose.yml`
-        echo `sed 's/VAR_RUTA_WEB/'"${VAR_RUTA_WEB_SIN_BARRAS}"'/g' ${RUTA_DOCKER}/docker-compose.yml.01 |sed 's/VAR_RUTA_BBDD/'"${VAR_RUTA_BBDD_SIN_BARRAS}"'/g'|sed 's/VAR_CONT_MYSQL/'"${VAR_CONT_MYSQL}"'/g'|sed 's/VAR_RUTA_IMAGENES/'"${VAR_RUTA_IMAGENES_SIN_BARRAS}"'/g'|sed 's/VAR_PARAM_VIRTUAL_PROTO/'"${PARAM_VIRTUAL_PROTO}"'/g'|sed 's/VAR_PARAM_VIRTUAL_PORT/'"${PARAM_VIRTUAL_PORT}"'/g'|sed 's/VAR_DOMINIO/'"${DOMINIO_TIENDA}"'/g'|sed 's/VAR_SSL_NGINX/'"${VAR_SSL_NGINX}"'/g' > ${RUTA_DOCKER}/docker-compose.yml`
-	
 	rm ${RUTA_DOCKER}/docker-compose.yml.01
 }
 
