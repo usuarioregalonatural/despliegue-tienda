@@ -5,6 +5,7 @@ services:
         container_name: vic-nginx-proxy
         ports:
           - "80:80"
+          VAR_SSL_NGINX
         volumes:
           - /var/run/docker.sock:/tmp/docker.sock:ro
           - ./certs:/etc/nginx/certs

@@ -31,6 +31,7 @@ SSLCertificateKeyFile /etc/ssl/private/VAR_DOMINIO.key
 SSLCertificateChainFile /etc/ssl/private/certificate.ca.crt
 
 
+
 # Esto es necesario para activar las URL amigables
 <Directory /var/www/html>
         Options Indexes FollowSymLinks MultiViews

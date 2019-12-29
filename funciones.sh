@@ -280,6 +280,7 @@ construye_imagen_www(){
         echo -e `${CMD_BORRADO_IMAGEN}`
         log "##    ... Creando la imagen"
         echo -e `${CMD_CREACION_IMAGEN}`
+	echo "Comando creacion imagen: ${CMD_CREACION_IMAGEN}"
         if [ $? -ne 0 ];
         then
           log "#######################################################"
@@ -365,6 +366,7 @@ backup_dockerfiles(){
  #rm -rf ${RUTA_DOCKER}/*
  rm -rf ${RUTA_DOCKER}/*
  mkdir ${RUTA_DOCKER_WWW}
+ mkdir ${RUTA_DOCKER_WWW}/certs
  mkdir ${RUTA_DOCKER_BBDD}
 
 }
@@ -447,7 +449,7 @@ parsea_docker_compose (){
         VAR_RUTA_IMAGENES_SIN_BARRAS=`echo ${RUTA_IMAGENES}|sed 's/\//\\\\\//g'`
 
         echo `sed 's/VAR_RUTA_WEB/'"${VAR_RUTA_WEB_SIN_BARRAS}"'/g' ${RUTA_DOCKER}/docker-compose.yml.01 |sed 's/VAR_RUTA_BBDD/'"${VAR_RUTA_BBDD_SIN_BARRAS}"'/g'|sed 's/VAR_CONT_MYSQL/'"${VAR_CONT_MYSQL}"'/g'|sed 's/VAR_RUTA_IMAGENES/'"${VAR_RUTA_IMAGENES_SIN_BARRAS}"'/g'|sed 's/VAR_DOMINIO_TIENDA/'"${DOMINIO_TIENDA}"'/g' > ${RUTA_DOCKER}/docker-compose.yml`
-	
+
 	rm ${RUTA_DOCKER}/docker-compose.yml.01
 }
 

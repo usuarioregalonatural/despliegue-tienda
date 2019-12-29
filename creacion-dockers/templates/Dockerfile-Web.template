@@ -23,6 +23,7 @@ COPY ./php.ini /etc/php/7.3/apache2
 COPY ./apache2.conf /etc/apache2
 
 
+
 RUN a2enconf fqdn
 RUN a2enmod rewrite
 VAR_SSLRUN a2enmod ssl
