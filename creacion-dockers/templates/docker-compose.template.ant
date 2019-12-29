@@ -15,7 +15,6 @@ services:
         container_name: tienda-web
         ports:
             - 8050:80
-            - 443:443
         volumes:
             - VAR_RUTA_WEB:/var/www/html/
         environment:
@@ -59,6 +58,8 @@ services:
             - 8055:80
         volumes:
             - VAR_RUTA_IMAGENES:/var/www/html/
+#        environment:
+#            - VIRTUAL_HOST=imagenes.regalonatural.com
         networks:
             - default
  

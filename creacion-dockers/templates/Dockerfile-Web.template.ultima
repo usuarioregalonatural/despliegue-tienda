@@ -11,11 +11,6 @@ ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 RUN apt-get update && apt-get upgrade -y
 
-
-COPY ./VAR_DOMINIO.crt /etc/ssl/private
-COPY ./certificate.ca.crt /etc/ssl/private
-COPY ./VAR_DOMINIO.key /etc/ssl/private
-
 COPY ./000-default.conf /etc/apache2/sites-available
 COPY ./default-ssl.conf /etc/apache2/sites-available
 COPY ./fqdn.conf /etc/apache2/conf-available
@@ -23,17 +18,11 @@ COPY ./php.ini /etc/php/7.3/apache2
 COPY ./apache2.conf /etc/apache2
 
 
-RUN a2enconf fqdn
 RUN a2enmod rewrite
-VAR_SSLRUN a2enmod ssl
-VAR_SSLRUN a2ensite default-ssl
 
 EXPOSE 80
-#EXPOSE 3306
 
 VAR_SSLEXPOSE 443
-
-
 
 COPY ./ejecuta.sh /
 RUN chmod 700 /ejecuta.sh

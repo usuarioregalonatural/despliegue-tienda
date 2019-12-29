@@ -41,6 +41,10 @@ Principalmente se ha personalizado la imagen de la web
 * Ojo, cuando ejecuta MySQL no es posible conectar con root desde PhpMyAdmin, 
 es necesario meterse dentro del docker de mysql y ejecutar
 
+## Siguiente mejora (Hecho!)
+
+Ya se genera con SSL sin problemas - 29-12-2019
+
 ```bash
 mysql -u root -p 
 ```
